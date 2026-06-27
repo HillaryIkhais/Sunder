@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SUNDER: Reality Propagation Engine
 
-## Getting Started
+SUNDER is an autonomous "Data Immune System" built for the **H0: Hack the Zero Stack** hackathon. It fundamentally changes the paradigm of data monitoring from "detecting errors" to "predicting and preventing cascading business failures".
 
-First, run the development server:
+## The Magic Demo
+Rather than a traditional dashboard, SUNDER is an engine that models how a single data anomaly propagates through a business ecosystem (Stripe Reconciliation -> Revenue Analytics -> Forecast Models). 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Most validation systems catch hard type errors (e.g., `Number` to `String`). SUNDER catches **Semantic Drift**. 
+If an upstream integration suddenly changes a payload key from `price` to `cost_usd`, traditional schema validation fails entirely. SUNDER detects the drift, visualizes the exact causal cascade before it occurs, and autonomously stabilizes the system state—proving that the failure was prevented, not detected.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deliberate Architecture (Vercel + Aurora PostgreSQL)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+SUNDER achieves this predictive capability through a deeply deliberate, AI-native architecture featuring a true **Zero-Secret** security posture:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Semantic Drift via pgvector
+Instead of using a basic relational database or NoSQL key-value store, SUNDER uses **Amazon Aurora PostgreSQL** specifically for its **pgvector** extension. 
 
-## Learn More
+When a semantic drift occurs (like `price` mutating to `cost_usd`), SUNDER converts the payload into a vector embedding. We execute a high-speed similarity search (`<=>`) across Aurora to instantly identify what other downstream systems share that semantic context and are mathematically guaranteed to fail.
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Zero-Secret Architecture (Vercel OIDC Federation)
+Enterprise security demands the elimination of long-lived, hardcoded database credentials. 
+SUNDER implements Vercel's official **OIDC (OpenID Connect) Federation**. Our Next.js backend (`src/lib/db.ts`) dynamically requests a short-lived token from Vercel to assume an AWS IAM role (`arn:aws:iam::...:role/SunderAuroraRole`). We connect to the Aurora database seamlessly without ever placing a static password in an `.env` file.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. The Vercel AI Edge
+We utilize the **Vercel AI SDK** hooked into our Next.js App Router API to provide real-time agentic reasoning. The AI isn't a chatbot; it acts as an agentic architectural guardian, utilizing the vector data from Aurora to calculate blast radius before pulling the trigger on an autonomous patch.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment Setup
+To run SUNDER in production, you must set up OIDC Federation via the Vercel Dashboard:
+- Connect your AWS account to Vercel via the Integrations tab.
+- Supply the `AWS_ROLE_ARN` and `OPENAI_API_KEY`.
+- Your database will be accessed dynamically without hardcoded secrets.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If these keys are not present, SUNDER automatically falls back to a graceful mock mode so the visual demo can still execute perfectly during local development (`localhost:3000`).
