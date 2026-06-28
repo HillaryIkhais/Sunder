@@ -43,10 +43,12 @@ export default function SunderDashboard({ userName }: { userName: string }) {
             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
               {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
-            <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors">Sign In</span>
-            <button className="bg-primary text-primary-foreground px-4 py-1.5 rounded-md font-mono text-xs font-medium uppercase tracking-wider hover:bg-primary/90 transition-colors">
-              Start Free
-            </button>
+            <Link href="/login" className="hidden md:block font-mono text-xs uppercase tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors">Sign In</Link>
+            <Link href="/signup">
+              <button className="bg-primary text-primary-foreground px-4 py-1.5 rounded-md font-mono text-xs font-medium uppercase tracking-wider hover:bg-primary/90 transition-colors">
+                Start Free
+              </button>
+            </Link>
           </div>
         </div>
       </header>
@@ -77,11 +79,13 @@ export default function SunderDashboard({ userName }: { userName: string }) {
               Silent pipeline breaks. Broken dashboards. Customers discovering bugs before you. Sunder catches drift automatically and heals it—before it reaches you.
             </motion.p>
             
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex justify-center gap-4 pt-8">
-              <button className="bg-primary text-primary-foreground px-8 py-3 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 group">
-                Start free <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
-              </button>
-              <button className="border border-border bg-background/50 backdrop-blur-sm px-8 py-3 rounded-full text-sm font-medium hover:bg-muted hover:text-foreground transition-colors">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-col md:flex-row justify-center gap-4 pt-8 w-full px-4">
+              <Link href="/signup" className="w-full md:w-auto">
+                <button className="w-full md:w-auto bg-primary text-primary-foreground px-8 py-3 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 group">
+                  Start free <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+                </button>
+              </Link>
+              <button className="w-full md:w-auto border border-border bg-background/50 backdrop-blur-sm px-8 py-3 rounded-full text-sm font-medium hover:bg-muted hover:text-foreground transition-colors">
                 See pricing
               </button>
             </motion.div>
@@ -167,7 +171,8 @@ export default function SunderDashboard({ userName }: { userName: string }) {
                 </span>
               </div>
               
-              <div className="grid grid-cols-[1fr_auto_1fr] bg-border gap-px">
+              <div className="overflow-x-auto w-full">
+                <div className="min-w-[600px] grid grid-cols-[1fr_auto_1fr] bg-border gap-px">
                 {/* Incoming */}
                 <div className="bg-card p-6">
                   <p className="mb-4 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Incoming · Shopify</p>
@@ -249,8 +254,8 @@ export default function SunderDashboard({ userName }: { userName: string }) {
       <footer className="py-12 px-6 border-t border-border/70 bg-background">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="font-mono text-xs text-muted-foreground">© 2026 Sunder Labs, Inc.</p>
-          <div className="flex gap-6 font-mono text-xs text-muted-foreground">
-            <span className="hover:text-foreground cursor-pointer transition-colors">Privacy</span>
+          <div className="flex gap-6 font-mono text-xs text-muted-foreground mt-6 md:mt-0">
+            <Link href="/privacy" className="hover:text-foreground cursor-pointer transition-colors">Privacy</Link>
             <span className="hover:text-foreground cursor-pointer transition-colors">Terms</span>
             <span className="hover:text-foreground cursor-pointer transition-colors">SOC 2</span>
           </div>

@@ -38,9 +38,14 @@ export const Header = () => {
         <Link href="/dashboard">Dashboard</Link>
         <Link href="/config">Settings</Link>
       </nav>
-      <Link href="/dashboard">
-        <button className="cta-button">Go to Dashboard</button>
-      </Link>
+      <div className="flex items-center gap-6">
+        <Link href="/login" className="hidden md:block text-[0.75rem] font-semibold tracking-widest uppercase text-white/60 hover:text-white transition-colors">
+          Login
+        </Link>
+        <Link href="/signup">
+          <button className="cta-button">Sign Up</button>
+        </Link>
+      </div>
     </motion.header>
   );
 };
@@ -76,7 +81,7 @@ export const Hero = () => {
             </span>
           </motion.div>
 
-          <motion.h1 variants={fadeUpVariant} className="hero-title glow-text" style={{ fontSize: 'clamp(5rem, 8vw, 9rem)', marginBottom: '1.5rem', lineHeight: 1.1 }}>
+          <motion.h1 variants={fadeUpVariant} className="hero-title glow-text" style={{ fontSize: 'clamp(3.5rem, 12vw, 9rem)', marginBottom: '1.5rem', lineHeight: 1.1 }}>
             SUNDER
           </motion.h1>
           <motion.p variants={fadeUpVariant} className="hero-subtitle text-[1.2rem] max-w-[800px] mx-auto mb-10">
@@ -183,8 +188,8 @@ export const Footer = () => {
     >
       <div>© 2026 Sunder Labs, Inc. All rights reserved.</div>
       <div style={{ display: 'flex', gap: '2rem' }}>
-        <a href="#privacy">Privacy Policy</a>
-        <a href="#terms">Terms of Service</a>
+        <Link href="/privacy">Privacy Policy</Link>
+        <Link href="#terms">Terms of Service</Link>
       </div>
     </motion.footer>
   );
