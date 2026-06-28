@@ -14,17 +14,15 @@ export async function POST(req: Request) {
     const schemaString = JSON.stringify(payload);
     
     let liveEmbedding: number[];
-    if (process.env.OPENAI_API_KEY) {
-      const { embedding } = await embed({
-        model: openai.embedding('text-embedding-3-small'),
-        value: schemaString,
-      });
-      liveEmbedding = embedding;
-    } else {
-      // Graceful fallback if the user hasn't added the key yet
-      console.warn("[SUNDER-AI] Missing OPENAI_API_KEY. Using deterministic vector.");
-      liveEmbedding = Array(1536).fill(0).map((_, i) => Math.sin(schemaString.length * i) * 0.1);
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json({ error: 'OPENAI_API_KEY is required for real AWS pgvector embeddings' }, { status: 401 });
     }
+    
+    const { embedding } = await embed({
+      model: openai.embedding('text-embedding-3-small'),
+      value: schemaString,
+    });
+    let liveEmbedding = embedding;
 
     // 2. Perform Vector Similarity Search on Aurora Serverless v2 using pgvector
     const historicalMatches = await searchHistoricalDrift(liveEmbedding);
