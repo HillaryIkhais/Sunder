@@ -23,26 +23,8 @@ export async function POST(req: Request) {
       If uncorrected, system divergence will begin in 42 seconds.
     `;
 
-    // Fallback if the OpenAI Key is not provided by the user in the Vercel Dashboard
     if (!process.env.OPENAI_API_KEY) {
-      console.warn("[SUNDER-AI] Missing OPENAI_API_KEY. Returning mocked stream.");
-      
-      const encoder = new TextEncoder();
-      const mockResponse = "Stripe reconciliation distortion (cycle 1)\nAnalytics revenue drift (cycle 2)\nForecast model degradation (cycle 3)\nPricing model instability (cycle 4)\n\nIf uncorrected, system divergence will begin in 42 seconds.";
-      
-      const stream = new ReadableStream({
-        async start(controller) {
-          for (let i = 0; i < mockResponse.length; i++) {
-            controller.enqueue(encoder.encode(mockResponse[i]));
-            await new Promise(r => setTimeout(r, 20)); // simulated typing
-          }
-          controller.close();
-        }
-      });
-
-      return new Response(stream, {
-        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
-      });
+      return new Response(JSON.stringify({ error: 'OPENAI_API_KEY is missing. Sunder requires a real OpenAI key to function.' }), { status: 401 });
     }
 
     // Call the real OpenAI API via Vercel AI SDK
