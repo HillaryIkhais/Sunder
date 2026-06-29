@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useTheme } from 'next-themes';
 import { LiquidOrb } from './LiquidOrb';
+import Link from 'next/link';
 import { Moon, Sun, ArrowRight, ShieldCheck, TrendingDown, Users, Clock, Eye, Wrench } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
