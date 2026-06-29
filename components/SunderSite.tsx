@@ -93,7 +93,7 @@ export const Hero = () => {
             SUNDER
           </motion.h1>
           <motion.p variants={fadeUpVariant} className="hero-subtitle text-[1.2rem] max-w-[800px] mx-auto mb-10">
-            Sunder intercepts incoming JSON payloads, runs real-time schema drift analysis using <strong className="text-white glow-text">AWS Aurora PostgreSQL pgvector</strong>, and auto-applies Node VM patches—before a single bad payload crashes your downstream services.
+            Sunder acts as a reverse proxy for your webhooks, detecting silent schema drift in real time and automatically healing broken JSON payloads before they crash your downstream services.
           </motion.p>
           
           <motion.div variants={fadeUpVariant}>
