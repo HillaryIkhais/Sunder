@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       model: openai.embedding('text-embedding-3-small'),
       value: schemaString,
     });
-    let liveEmbedding = embedding;
+    liveEmbedding = embedding;
 
     // 2. Perform Vector Similarity Search on Aurora Serverless v2 using pgvector
     const historicalMatches = await searchHistoricalDrift(liveEmbedding);
