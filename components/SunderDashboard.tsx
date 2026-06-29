@@ -240,6 +240,7 @@ export default function SunderDashboard({ userName }: { userName: string }) {
                     <span className="text-muted-foreground">{`}`}</span>
                   </pre>
                 </div>
+                </div>
               </div>
               
               <div className="border-t border-border px-5 py-3 bg-card">
