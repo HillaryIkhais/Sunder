@@ -23,6 +23,7 @@ function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
 /* ── Components from Vite Layout ────────────────────────────────────────── */
 
 import Link from 'next/link';
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 export const Header = () => {
   return (
@@ -39,12 +40,19 @@ export const Header = () => {
         <Link href="/config">Settings</Link>
       </nav>
       <div className="flex items-center gap-6">
-        <Link href="/login" className="hidden md:block text-[0.75rem] font-semibold tracking-widest uppercase text-white/60 hover:text-white transition-colors">
-          Login
-        </Link>
-        <Link href="/signup">
-          <button className="cta-button">Sign Up</button>
-        </Link>
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button className="hidden md:block text-[0.75rem] font-semibold tracking-widest uppercase text-white/60 hover:text-white transition-colors">
+              Login
+            </button>
+          </SignInButton>
+          <SignUpButton mode="modal">
+            <button className="cta-button">Sign Up</button>
+          </SignUpButton>
+        </SignedOut>
+        <SignedIn>
+          <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8 rounded-md border border-white/20" } }} />
+        </SignedIn>
       </div>
     </motion.header>
   );

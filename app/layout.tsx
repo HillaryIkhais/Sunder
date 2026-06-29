@@ -1,3 +1,5 @@
+import {ClerkProvider} from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import './globals.css'
@@ -23,9 +25,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         `}</style>
       </head>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+        <ClerkProvider
+          appearance={{
+            baseTheme: dark,
+            variables: { colorPrimary: '#ffffff' }
+          }}
+        >
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {children}
-        </ThemeProvider>
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   )
