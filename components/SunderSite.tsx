@@ -89,12 +89,15 @@ export const Hero = () => {
             </span>
           </motion.div>
 
-          <motion.h1 variants={fadeUpVariant} className="hero-title glow-text" style={{ fontSize: 'clamp(3.5rem, 12vw, 9rem)', marginBottom: '1.5rem', lineHeight: 1.1 }}>
-            SUNDER
-          </motion.h1>
-          <motion.p variants={fadeUpVariant} className="hero-subtitle text-[1.2rem] max-w-[800px] mx-auto mb-10">
-            Sunder intercepts incoming JSON payloads, runs real-time schema drift analysis using <strong className="text-white glow-text">AWS Aurora PostgreSQL pgvector</strong>, and auto-applies Node VM patches—before a single bad payload crashes your downstream services.
-          </motion.p>
+          <motion.div className="hero-content">
+            <motion.h1 className="hero-title" variants={fadeUpVariant}>
+              Sunder <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-400">Data Immune System</span>
+            </motion.h1>
+            <motion.p className="hero-subtitle max-w-2xl mx-auto" variants={fadeUpVariant}>
+              Sunder detects silent API schema changes and automatically heals your JSON payloads before they crash your backend. Zero downtime. Zero midnight pages.
+            </motion.p>
+          </motion.div>
           
           <motion.div variants={fadeUpVariant}>
             <Link href="/dashboard">
