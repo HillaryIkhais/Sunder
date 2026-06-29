@@ -5,7 +5,7 @@ import { Canvas } from '@react-three/fiber';
 import { useTheme } from 'next-themes';
 import { LiquidOrb } from './LiquidOrb';
 import Link from 'next/link';
-import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { SignInButton, SignUpButton, Show, UserButton } from '@clerk/nextjs';
 import { Moon, Sun, ArrowRight, ShieldCheck, TrendingDown, Users, Clock, Eye, Wrench } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -71,7 +71,7 @@ export default function SunderDashboard({ userName }: { userName: string }) {
             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
               {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
-            <SignedOut>
+            <Show when="signed-out">
               <SignInButton mode="modal">
                 <button className="hidden md:block font-mono text-xs uppercase tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors">Sign In</button>
               </SignInButton>
@@ -80,10 +80,10 @@ export default function SunderDashboard({ userName }: { userName: string }) {
                   Start Free
                 </button>
               </SignUpButton>
-            </SignedOut>
-            <SignedIn>
+            </Show>
+            <Show when="signed-in">
               <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8 rounded-md" } }} />
-            </SignedIn>
+            </Show>
           </div>
         </div>
       </header>
