@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { logSystemEvent, searchHistoricalDrift, getActiveTransformer } from '@/lib/db';
-import { embed } from 'ai';
+import { embed, generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import vm from 'vm';
 
@@ -35,9 +35,20 @@ export async function POST(req: Request) {
     if (historicalMatches.length > 0 && historicalMatches[0].distance > 0.15) {
       isDrift = true;
       
-      // 4. THE TRANSFORMER ENGINE: Physically heal the payload
-      // Pull the active JavaScript transformation logic from Aurora
-      transformerCode = await getActiveTransformer(sourcePipeline);
+      // 4. THE TRANSFORMER ENGINE: Autonomous Agentic Healing
+      // Instead of pulling a hardcoded script, use the LLM to write the Javascript dynamically
+      if (historicalMatches.length > 0 && historicalMatches[0].payload) {
+        const { text } = await generateText({
+          model: openai('gpt-4o'),
+          prompt: `You are an autonomous data healing agent inside a Node VM sandbox.
+The historical expected JSON schema is: ${JSON.stringify(historicalMatches[0].payload)}.
+The new corrupted incoming JSON payload is: ${JSON.stringify(payload)}.
+Write exactly ONE line of Javascript that mutates the 'payload' object to map the new corrupted schema back to the historical schema structure. 
+Do not include markdown, backticks, or any explanation. Just the raw JS string.
+Example output: payload.order_id = payload.transaction_id; delete payload.transaction_id;`
+        });
+        transformerCode = text.replace(/`/g, '').trim();
+      }
       
       if (transformerCode) {
         try {
