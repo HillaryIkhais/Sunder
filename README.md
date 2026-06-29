@@ -1,33 +1,83 @@
-# SUNDER: Reality Propagation Engine
+<div align="center">
+  <h1>SUNDER</h1>
+  <p><strong>An Autonomous Data Immune System</strong></p>
+  <p><em>Built for the "H0: Hack the Zero Stack" Hackathon</em></p>
 
-SUNDER is an autonomous "Data Immune System" built for the **H0: Hack the Zero Stack** hackathon. It fundamentally changes the paradigm of data monitoring from "detecting errors" to "predicting and preventing cascading business failures".
+  [![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+  [![AWS](https://img.shields.io/badge/AWS_Aurora-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
+  [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
+  [![Clerk](https://img.shields.io/badge/Clerk-6C47FF?style=for-the-badge&logo=clerk&logoColor=white)](https://clerk.dev/)
+</div>
 
-## The Magic Demo
-Rather than a traditional dashboard, SUNDER is an engine that models how a single data anomaly propagates through a business ecosystem (Stripe Reconciliation -> Revenue Analytics -> Forecast Models). 
+---
 
-Most validation systems catch hard type errors (e.g., `Number` to `String`). SUNDER catches **Semantic Drift**. 
-If an upstream integration suddenly changes a payload key from `price` to `cost_usd`, traditional schema validation fails entirely. SUNDER detects the drift, visualizes the exact causal cascade before it occurs, and autonomously stabilizes the system state—proving that the failure was prevented, not detected.
+## ⚡ The Elevator Pitch
+B2B engineering teams face a massive crisis: **Semantic Schema Drift**. When third-party APIs (like Stripe or Shopify) silently mutate their data structures, it instantly breaks downstream ingestion pipelines. Traditional monitoring tools only flag type errors, missing semantic changes entirely. 
 
-## Deliberate Architecture (Vercel + Aurora PostgreSQL)
+Sunder acts as a reverse proxy for your enterprise webhooks. It mathematically proves structural drift in milliseconds, and autonomously generates a JavaScript patch to remap the invalid JSON on the fly. Clean data keeps flowing, preventing downstream services from crashing.
 
-SUNDER achieves this predictive capability through a deeply deliberate, AI-native architecture featuring a true **Zero-Secret** security posture:
+---
 
-### 1. Semantic Drift via pgvector
-Instead of using a basic relational database or NoSQL key-value store, SUNDER uses **Amazon Aurora PostgreSQL** specifically for its **pgvector** extension. 
+## 🏗️ The Zero-Secret Architecture
 
-When a semantic drift occurs (like `price` mutating to `cost_usd`), SUNDER converts the payload into a vector embedding. We execute a high-speed similarity search (`<=>`) across Aurora to instantly identify what other downstream systems share that semantic context and are mathematically guaranteed to fail.
+We built Sunder strictly adhering to the "Zero-Secret" philosophy, leveraging the absolute cutting edge of the Vercel and AWS ecosystems.
 
-### 2. Zero-Secret Architecture (Vercel OIDC Federation)
-Enterprise security demands the elimination of long-lived, hardcoded database credentials. 
-SUNDER implements Vercel's official **OIDC (OpenID Connect) Federation**. Our Next.js backend (`src/lib/db.ts`) dynamically requests a short-lived token from Vercel to assume an AWS IAM role (`arn:aws:iam::...:role/SunderAuroraRole`). We connect to the Aurora database seamlessly without ever placing a static password in an `.env` file.
+```mermaid
+flowchart TD
+    %% Styling
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#232F3E,font-weight:bold
+    classDef vercel fill:#000000,stroke:#FFFFFF,stroke-width:2px,color:#FFFFFF,font-weight:bold
+    classDef default fill:#1E1E1E,stroke:#444,stroke-width:1px,color:#FFF
 
-### 3. The Vercel AI Edge
-We utilize the **Vercel AI SDK** hooked into our Next.js App Router API to provide real-time agentic reasoning. The AI isn't a chatbot; it acts as an agentic architectural guardian, utilizing the vector data from Aurora to calculate blast radius before pulling the trigger on an autonomous patch.
+    A[Incoming Webhook Payload] --> B[Vercel Edge Runtime]
+    
+    subgraph Vercel Cloud
+        B:::vercel --> C{Vercel AI SDK}:::vercel
+        C -->|Generates AST Patch| D[Node VM Sandbox]:::vercel
+    end
+    
+    subgraph AWS Cloud
+        B -- "Zero-Secret OIDC Federation" --> E[(AWS Aurora Serverless v2)]:::aws
+        E --> F[pgvector]:::aws
+    end
+    
+    F -. "Semantic Similarity Search" .-> C
+    D -->|Healed JSON Payload| G[Downstream Services]
+```
 
-## Environment Setup
-To run SUNDER in production, you must set up OIDC Federation via the Vercel Dashboard:
-- Connect your AWS account to Vercel via the Integrations tab.
-- Supply the `AWS_ROLE_ARN` and `OPENAI_API_KEY`.
-- Your database will be accessed dynamically without hardcoded secrets.
+### Core Technologies
+* **v0 by Vercel:** Rapid generation of the cinematic, glassmorphic Next.js UI.
+* **Vercel AI SDK:** Dynamic generation of AST (Abstract Syntax Tree) JavaScript payload-remapping logic.
+* **AWS Aurora Serverless v2 & pgvector:** High-speed semantic similarity search \(\langle \vec{a}, \vec{b} \rangle\) across Aurora using `pgvector` to instantly compare incoming payloads against expected historical schemas.
+* **Vercel OIDC (Zero-Secret):** To achieve enterprise security, we completely eliminated hardcoded AWS passwords. Sunder uses Vercel's official OpenID Connect (OIDC) Federation to dynamically assume AWS IAM roles using short-lived, ephemeral STS tokens.
+* **Clerk:** Secure, drop-in user authentication.
 
-If these keys are not present, SUNDER automatically falls back to a graceful mock mode so the visual demo can still execute perfectly during local development (`localhost:3000`).
+---
+
+## 🚀 How Sunder Heals Data
+
+Sunder dynamically heals complex semantic drift, such as:
+1. **Deep Nesting:** A provider stops sending `customer_email` at the root level and buries it inside a nested `user: { contact: { email: "..." } }` object.
+2. **Type Mutations:** A payment gateway silently switches an `amount: 100` (integer) to `amount: "100.00"` (string), which would normally crash a strict SQL database.
+3. **Format Shifts:** A vendor switches from Unix timestamps (`1719244800`) to ISO-8601 strings (`"2026-06-29T14:00:00Z"`).
+
+---
+
+## 🛠️ Running Locally
+
+1. Clone the repository
+2. Install dependencies:
+```bash
+npm install
+```
+3. Set up your `.env.local` with your Clerk Development Keys:
+```env
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+```
+*(Note: AWS Aurora is accessed dynamically via Vercel OIDC Federation in production. No local AWS credentials are required to run the visual dashboard simulation).*
+
+4. Run the development server:
+```bash
+npm run dev
+```
