@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ClerkProvider
           appearance={{
-            baseTheme: dark,
+            theme: dark,
             variables: { colorPrimary: '#ffffff' }
           }}
         >
